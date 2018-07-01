@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "A benchmarking framework for nodejs",
   "main": "src/index.js",
+  "engines": {
+    "node": ">=10.5.0"
+  },
+  "bin": "src/bin.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,6 +23,7 @@
   },
   "dependencies": {
     "cancelp": "^0.1.0",
+    "semver": "^5.5.0",
     "worker-threads-pool": "^1.0.0"
   }
 }
