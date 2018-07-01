@@ -1,6 +1,6 @@
 {
   "name": "@mees-/bench",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A benchmarking framework for nodejs",
   "main": "src/index.js",
   "engines": {
