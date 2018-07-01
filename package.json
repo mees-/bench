@@ -1,6 +1,6 @@
 {
   "name": "@mees-/bench",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A benchmarking framework for nodejs",
   "licence": "MIT",
   "homepage": "https://github.com/mees-/bench#readme",
