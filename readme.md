@@ -15,10 +15,24 @@ the package exposes a bin that can be used from the command line and in npm scri
 
 ## Usage
 
-run `bench [filename]` to benchmark a file
+```
+  $ bench <filename> [options]
 
-currently doens't support command-line options (yet)
-you can specify the options and what to benchmark in the file that you're passing as an argument to `bench`
+Options
+  --runs, -r                      the amount of runs of loops to do, default: 1000
+  --loops, -l                     the amount of loops to do every run, default: 50
+  --maxThreads, -m                the maximum amount of threads to spawn, this defaults to the amount of cores
+  --no--hyperthreading, --no-h    without this the maxthreads will be halved to avoid hyperthreading, unless you set maxthreads manually
+
+Examples
+  $ bench src/benchmark.js -r 1000 -l 80 --no-ht
+  avg run:        185.570ms
+  avg loop:       927.852µs
+  stddev:         8.881ms
+  max:            221.112ms
+  min:            178.499ms
+  total time:     2.52s
+```
 
 the file looks like this, with all keys optional except for `benchmarkFunction`
 

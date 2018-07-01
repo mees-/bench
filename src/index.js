@@ -5,7 +5,8 @@ const Cancelp = require('cancelp')
 
 module.exports = async function bench(filename, options = {}) {
   const maxThreads =
-    options.maxThreads || (options.ht ? os.cpus().length / 2 : os.cpus().length)
+    options.maxThreads ||
+    (options.hyperthreading ? os.cpus().length / 2 : os.cpus().length)
   const pool = new Pool({ max: maxThreads })
   const performanceEntries = []
 

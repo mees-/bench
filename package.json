@@ -27,6 +27,8 @@
   },
   "dependencies": {
     "cancelp": "^0.1.0",
+    "groom": "^1.1.1",
+    "meow": "^5.0.0",
     "semver": "^5.5.0",
     "worker-threads-pool": "^1.0.0"
   }

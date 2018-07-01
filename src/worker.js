@@ -2,8 +2,7 @@ const { parentPort, workerData } = require('worker_threads')
 const { PerformanceObserver, performance } = require('perf_hooks')
 
 const subject = require(workerData.filename)
-
-const work = () => {
+;(async () => {
   const context = (subject.createContext && subject.createContext()) || {}
 
   const performanceEntries = []
@@ -18,13 +17,12 @@ const work = () => {
     performance.mark(`run-${i}-start`)
 
     for (let j = 0; j < workerData.loops; j++) {
-      subject.benchmarkFunction(context)
+      await subject.benchmarkFunction(context)
     }
 
     performance.mark(`run-${i}-end`)
     performance.measure(`run-${i}`, `run-${i}-start`, `run-${i}-end`)
     performance.clearMarks()
-    // performance.clearMeasures()
     subject.afterRun && subject.afterRun(context)
   }
 
@@ -33,42 +31,4 @@ const work = () => {
 
   parentPort.postMessage({ performanceEntries })
   parentPort.unref()
-}
-
-const workAsync = async () => {
-  const context = (subject.createContext && subject.createContext()) || {}
-
-  const performanceEntries = []
-  const observer = new PerformanceObserver(list => {
-    performanceEntries.push(...list.getEntries().map(entry => entry.duration))
-  })
-  observer.observe({ entryTypes: ['measure'] })
-  workerData.beforeBench && workerData.beforeBench(context)
-
-  for (let i = 0; i < workerData.runs; i++) {
-    subject.beforeRun && subject.beforeRun(context)
-    performance.mark(`run-${i}-start`)
-
-    for (let j = 0; j < workerData.loops; j++) {
-      await subject.benchMarkFunction(context)
-    }
-
-    performance.mark(`run-${i}-end`)
-    performance.measure(`run-${i}`, `run-${i}-start`, `run-${i}-end`)
-    performance.clearMarks()
-    performance.clearMeasures()
-    subject.afterRun && subject.afterRun(context)
-  }
-
-  subject.afterBench && subject.afterBench(context)
-  observer.disconnect()
-
-  parentPort.postMessage({ performanceEntries })
-  parentPort.unref()
-}
-
-if (workerData.async) {
-  workAsync()
-} else {
-  work()
-}
+})()
