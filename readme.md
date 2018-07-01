@@ -30,13 +30,14 @@ module.exports = {
   afterBench: (context) => void,
 
   options: {
-    // the amount of runs of loops to do
+    // the amount of runs of loops to do, default: 1000
     runs: number,
-    // the amount of loops to do in a run
+    // the amount of loops to do in a run, default: 50
     loops: number,
     // the maximum amount of threads to use, defaults to amount of cores
     maxThreads: number,
     // if maxThreads isn't set, setting ht to true will divide the cores by 2 to avoid hyperthreading
+    // default: true
     ht: boolean
   }
 }
