@@ -4,7 +4,8 @@ const path = require('path')
 const Cancelp = require('cancelp')
 
 module.exports = async function bench(filename, options = {}) {
-  const maxThreads = options.maxThreads || os.cpus().length
+  const maxThreads =
+    options.maxThreads || (options.ht ? os.cpus().length / 2 : os.cpus().length)
   const pool = new Pool({ max: maxThreads })
   const performanceEntries = []
 
@@ -17,8 +18,8 @@ module.exports = async function bench(filename, options = {}) {
         workerData: {
           runs: options.runs / maxThreads,
           loops: options.loops,
-          filename
-        }
+          filename,
+        },
       },
       res => {
         if (res instanceof Error) {
@@ -37,7 +38,7 @@ module.exports = async function bench(filename, options = {}) {
             }
           })
         }
-      }
+      },
     )
   }
 
