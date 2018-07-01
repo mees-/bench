@@ -25,7 +25,7 @@ Options
   --no--hyperthreading, --no-h    without this the maxthreads will be halved to avoid hyperthreading, unless you set maxthreads manually
 
 Examples
-  $ bench src/benchmark.js -r 1000 -l 80 --no-ht
+  $ bench src/benchmark.js -r 1000 -l 80 --no-h
   avg run:        185.570ms
   avg loop:       927.852µs
   stddev:         8.881ms
