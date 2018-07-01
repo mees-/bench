@@ -28,6 +28,15 @@ const filename = path.resolve(
     require(filename).options || {},
   )
 
+  if (
+    typeof options.runs !== 'number' ||
+    typeof options.loops !== 'number' ||
+    typeof options.ht !== 'boolean'
+  ) {
+    console.error('options are not valid')
+    process.exit(2)
+  }
+
   const results = await bench(filename, options)
 
   const stats = {}
