@@ -21,10 +21,7 @@ the file looks like this, with all keys optional except for `benchmarkFunction`
 
 ```ts
 module.exports = {
-  /*
-    return a context that will be passed to all other lifecycle functions
-
-  */
+  // return a context that will be passed to all other lifecycle functions
   createContext: () => any,
   beforeBench: (context) => void,
   beforeRun: (context) => void,
