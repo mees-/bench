@@ -2,6 +2,10 @@
   "name": "@mees-/bench",
   "version": "0.1.0",
   "description": "A benchmarking framework for nodejs",
+  "licence": "MIT",
+  "homepage": "https://github.com/mees-/bench#readme",
+  "bugs": "https://github.com/mees-/bench/issues",
+  "repository": "mees-/bench",
   "main": "src/index.js",
   "engines": {
     "node": ">=10.5.0"
