@@ -2,7 +2,7 @@
   "name": "bench",
   "version": "1.0.0",
   "description": "A benchmarking framework for nodejs",
-  "main": "dist/index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,5 +13,12 @@
     "performance"
   ],
   "author": "Mees van Dijk <mees@itisme.es> (http://mees.io)",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "^1.13.6"
+  },
+  "dependencies": {
+    "cancelp": "^0.1.0",
+    "worker-threads-pool": "^1.0.0"
+  }
 }
