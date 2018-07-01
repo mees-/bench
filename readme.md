@@ -1,8 +1,8 @@
-# bench
+# Bench
 
 > a benchmarking framework for **Node.js** that uses the new `worker_threads` module to speed up benchmarks
 
-## usage
+## Installation
 
 install locally or globally by using
 
@@ -10,9 +10,12 @@ install locally or globally by using
 npm install @mees-/bench
 ```
 
-with an optional `-g` option to install globally
+with an optional `-g` option to install globally  
+the package exposes a bin that can be used from the command line and in npm scripts
 
-then run `bench [filename]` to benchmark a file
+## Usage
+
+run `bench [filename]` to benchmark a file
 
 currently doens't support command-line options (yet)
 you can specify the options and what to benchmark in the file that you're passing as an argument to `bench`
