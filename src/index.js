@@ -10,9 +10,12 @@ module.exports = async function bench(filename, options = {}, cb) {
   const pool = new Pool({ max: maxThreads })
   const entries = []
 
+  if (options.progressive && typeof cb !== 'function') {
+    throw new Error('Provide a callback when options.progressive is true')
+  }
+
   const resultPromise = new Cancelp(() => {})
   let workers = 0
-  const progressive = typeof cb === 'function'
   for (let i = 0; i < maxThreads; i++) {
     pool.acquire(
       path.resolve(__dirname, './worker.js'),
@@ -21,7 +24,7 @@ module.exports = async function bench(filename, options = {}, cb) {
           runs: options.runs / maxThreads,
           loops: options.loops,
           filename,
-          progressive,
+          progressive: options.progressive,
         },
       },
       res => {
@@ -30,7 +33,7 @@ module.exports = async function bench(filename, options = {}, cb) {
         } else {
           workers++
           res.on('message', val => {
-            if (progressive) {
+            if (options.progressive) {
               if (val.partialEntries) {
                 entries.push(...val.partialEntries)
                 cb({

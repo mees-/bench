@@ -23,6 +23,7 @@ Options
   --loops, -l                     the amount of loops to do every run, default: 50
   --maxThreads, -m                the maximum amount of threads to spawn, this defaults to the amount of cores
   --no--hyperthreading, --no-h    without this the maxthreads will be halved to avoid hyperthreading, unless you set maxthreads manually
+  --progressive, -p               print progress and intermediate stats to stderr during benchmarking
 
 Examples
   $ bench src/benchmark.js -r 1000 -l 80 --no-ht
@@ -52,10 +53,9 @@ Examples
         alias: 'h',
         default: true,
       },
-      async: {
+      progressive: {
         type: 'boolean',
-        alias: 'a',
-        default: false,
+        alias: 'p',
       },
     },
   },
@@ -83,8 +83,8 @@ const filename = path.resolve(cliOptions.input[0])
       l: undefined,
       r: undefined,
       m: undefined,
+      p: undefined,
     }),
-    { progressive: true },
   )
 
   if (
