@@ -13,7 +13,7 @@ module.exports = async function bench(filename, options = {}, cb) {
   const resultPromise = new Cancelp(() => {})
   let workers = 0
   const progressive = typeof cb === 'function'
-  while (pool.size < maxThreads) {
+  for (let i = 0; i < maxThreads; i++) {
     pool.acquire(
       path.resolve(__dirname, './worker.js'),
       {
@@ -31,18 +31,19 @@ module.exports = async function bench(filename, options = {}, cb) {
           workers++
           res.on('message', val => {
             if (progressive) {
-              entries.push(...val.partialEntries)
-              try {
+              if (val.partialEntries) {
+                entries.push(...val.partialEntries)
                 cb({
-                  completion: entries.length / (options.runs * options.loops),
                   partialEntries: val.partialEntries,
+                  entries,
                 })
-              } catch {}
+              }
             } else {
               entries.push(...val.entries)
             }
           })
           res.on('error', err => {
+            workers--
             console.error('error in worker', err)
           })
           res.on('exit', () => {

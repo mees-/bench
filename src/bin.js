@@ -5,6 +5,8 @@ const { performance } = require('perf_hooks')
 const semver = require('semver')
 const meow = require('meow')
 const groom = require('groom')
+const createStats = require('./createStats.js')
+const logUpdate = require('log-update')
 
 if (!semver.gte(process.version, '10.5.0')) {
   console.error('At least Node 10.5.0 is required, please update')
@@ -82,6 +84,7 @@ const filename = path.resolve(cliOptions.input[0])
       r: undefined,
       m: undefined,
     }),
+    { progressive: true },
   )
 
   if (
@@ -93,34 +96,35 @@ const filename = path.resolve(cliOptions.input[0])
     process.exit(2)
   }
 
-  const results = await bench(filename, options)
+  const logStr = s => `\
+proress:        ${Math.round(s.progress * 100)}%
+avg run:        ${s.avgRun.toFixed(3)}ms
+avg loop:       ${(s.avgLoop < 1 ? s.avgLoop * 1000 : s.avgLoop).toFixed(3)}${
+    s.avgLoop < 1 ? 'µs' : 'ms'
+  }
+stddev:         ${s.stddev.toFixed(3)}ms
+max:            ${s.max.toFixed(3)}ms
+min:            ${s.min.toFixed(3)}ms
+total results   ${s.totalentries}
+total time:     ${(s.totalTime / 1000).toFixed(2)}s`
 
-  const stats = {}
-  stats.start = start
-  stats.end = performance.now()
-  stats.avgRun =
-    results.reduce((total, current) => total + current) / results.length
-  stats.avgLoop = stats.avgRun / options.loops
-  stats.stddev = Math.sqrt(
-    results
-      .map(entry => entry - stats.avgRun)
-      .map(diff => Math.pow(diff, 2))
-      .reduce((total, current) => total + current) / results.length,
-  )
-  stats.max = Math.max(...results)
-  stats.min = Math.min(...results)
-  stats.totalResults = results.length
-  stats.totalTime = stats.end - stats.start
+  const results = await bench(filename, options, ({ entries }) => {
+    logUpdate.stderr(
+      logStr(
+        createStats(entries, {
+          start,
+          runs: options.runs,
+          loops: options.loops,
+        }),
+      ),
+    )
+  })
 
-  console.log(`\
-avg run:        ${stats.avgRun.toFixed(3)}ms
-avg loop:       ${(stats.avgLoop < 1
-    ? stats.avgLoop * 1000
-    : stats.avgLoop
-  ).toFixed(3)}${stats.avgLoop < 1 ? 'µs' : 'ms'}
-stddev:         ${stats.stddev.toFixed(3)}ms
-max:            ${stats.max.toFixed(3)}ms
-min:            ${stats.min.toFixed(3)}ms
-total results   ${stats.totalResults}
-total time:     ${(stats.totalTime / 1000).toFixed(2)}s`)
+  logUpdate.stderr.clear()
+  const stats = createStats(results, {
+    start,
+    runs: options.runs,
+    loops: options.loops,
+  })
+  console.log(logStr(stats))
 })()

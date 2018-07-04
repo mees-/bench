@@ -3,7 +3,7 @@ module.exports = {
     for (let i = 0; i < Math.pow(10, 6); i++);
   },
   options: {
-    runs: 420,
+    runs: 1000,
     loops: 50,
   },
 }

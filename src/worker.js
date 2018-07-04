@@ -9,31 +9,29 @@ const subject = require(workerData.filename)
   const context = (subject.createContext && subject.createContext()) || {}
 
   const entries = []
-  workerData.beforeBench && workerData.beforeBench(context)
-
+  subject.beforeBench && subject.beforeBench(context)
   for (let i = 0; i < workerData.runs; i++) {
     subject.beforeRun && subject.beforeRun(context)
     const runStart = process.hrtime()
-
     for (let j = 0; j < workerData.loops; j++) {
       await subject.benchmarkFunction(context)
     }
-
     const runTime = convertHrtime(process.hrtime(runStart))
     entries.push(runTime)
     subject.afterRun && subject.afterRun(context)
-    if (workerData.progressive && i % Math.trunc(workerData.runs / 100) === 0) {
+    if (workerData.progressive && i % Math.ceil(workerData.runs / 100) === 0) {
+      const partialEntries = entries.slice(
+        -1 * Math.ceil(workerData.runs / 100),
+      )
       parentPort.postMessage({
-        partialEntries: entries.slice(i - 10),
+        partialEntries,
       })
     }
   }
 
   subject.afterBench && subject.afterBench(context)
 
-  if (!workerData.progressive) {
-    parentPort.postMessage({ entries })
-  }
+  parentPort.postMessage({ entries })
 
   parentPort.unref()
 })()
