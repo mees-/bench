@@ -109,6 +109,7 @@ const filename = path.resolve(cliOptions.input[0])
   )
   stats.max = Math.max(...results)
   stats.min = Math.min(...results)
+  stats.totalResults = results.length
   stats.totalTime = stats.end - stats.start
 
   console.log(`\
@@ -120,5 +121,6 @@ avg loop:       ${(stats.avgLoop < 1
 stddev:         ${stats.stddev.toFixed(3)}ms
 max:            ${stats.max.toFixed(3)}ms
 min:            ${stats.min.toFixed(3)}ms
+total results   ${stats.totalResults}
 total time:     ${(stats.totalTime / 1000).toFixed(2)}s`)
 })()
